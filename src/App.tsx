@@ -13,42 +13,42 @@ const translations = {
     vote: "Voter",
     percentage: "% des votes",
     glass: "Verre rempli 🍺",
-    candidates: ["Personne 1", "Personne 2", "Personne 3"],
+    candidates: ["Sylvain", "Personne 2", "Personne 3"],
   },
   en: {
     title: "Who is the biggest alcoholic? 🍻",
     vote: "Vote",
     percentage: "% of votes",
     glass: "Glass filled 🍺",
-    candidates: ["Person 1", "Person 2", "Person 3"],
+    candidates: ["Sylvain", "Person 2", "Person 3"],
   },
   de: {
     title: "Wer ist der größte Alkoholiker? 🍻",
     vote: "Abstimmen",
     percentage: "% der Stimmen",
     glass: "Gefülltes Glas 🍺",
-    candidates: ["Person 1", "Person 2", "Person 3"],
+    candidates: ["Sylvain", "Person 2", "Person 3"],
   },
   zh: {
     title: "谁是最大的酒鬼？🍻",
     vote: "投票",
     percentage: "% 的投票",
     glass: "满杯 🍺",
-    candidates: ["人物 1", "人物 2", "人物 3"],
+    candidates: ["西尔万", "人物 2", "人物 3"],
   },
   ja: {
     title: "誰が一番の酒豪？🍻",
     vote: "投票する",
     percentage: "％の投票",
     glass: "満杯のグラス 🍺",
-    candidates: ["人物 1", "人物 2", "人物 3"],
+    candidates: ["シルヴァン", "人物 2", "人物 3"],
   },
   es: {
     title: "¿Quién es el más alcohólico? 🍻",
     vote: "Votar",
     percentage: "% de votos",
     glass: "Vaso lleno 🍺",
-    candidates: ["Persona 1", "Persona 2", "Persona 3"],
+    candidates: ["Sylvain", "Persona 2", "Persona 3"],
   },
 };
 
@@ -69,7 +69,7 @@ export default function App() {
   };
 
   const candidats: Candidat[] = [
-    { id: 1, nom: translations[lang].candidates[0], image: "https://placekitten.com/200/200" },
+    { id: 1, nom: translations[lang].candidates[0], image: "/public/Photo/SG_Positif.png" },
     { id: 2, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
     { id: 3, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
   ];
