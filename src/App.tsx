@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface Candidat {
@@ -29,10 +29,44 @@ const translations = {
     glass: "Gefülltes Glas 🍺",
     candidates: ["Person 1", "Person 2", "Person 3"],
   },
+  zh: {
+    title: "谁是最大的酒鬼？🍻",
+    vote: "投票",
+    percentage: "% 的投票",
+    glass: "满杯 🍺",
+    candidates: ["人物 1", "人物 2", "人物 3"],
+  },
+  ja: {
+    title: "誰が一番の酒豪？🍻",
+    vote: "投票する",
+    percentage: "％の投票",
+    glass: "満杯のグラス 🍺",
+    candidates: ["人物 1", "人物 2", "人物 3"],
+  },
+  es: {
+    title: "¿Quién es el más alcohólico? 🍻",
+    vote: "Votar",
+    percentage: "% de votos",
+    glass: "Vaso lleno 🍺",
+    candidates: ["Persona 1", "Persona 2", "Persona 3"],
+  },
 };
 
 export default function App() {
-  const [lang, setLang] = useState<"fr" | "en" | "de">("fr");
+  const [lang, setLang] = useState<keyof typeof translations>("fr");
+
+  // Sauvegarde la langue dans localStorage
+  useEffect(() => {
+    const savedLang = localStorage.getItem("lang") as keyof typeof translations;
+    if (savedLang && translations[savedLang]) {
+      setLang(savedLang);
+    }
+  }, []);
+
+  const changeLang = (lng: keyof typeof translations) => {
+    setLang(lng);
+    localStorage.setItem("lang", lng);
+  };
 
   const candidats: Candidat[] = [
     { id: 1, nom: translations[lang].candidates[0], image: "https://placekitten.com/200/200" },
@@ -62,9 +96,12 @@ export default function App() {
 
       {/* Sélecteur de langue */}
       <div className="absolute top-4 left-4 flex space-x-2">
-        <button onClick={() => setLang("fr")} className="text-2xl">🇫🇷</button>
-        <button onClick={() => setLang("en")} className="text-2xl">🇬🇧</button>
-        <button onClick={() => setLang("de")} className="text-2xl">🇩🇪</button>
+        <button onClick={() => changeLang("fr")} className="text-2xl">🇫🇷</button>
+        <button onClick={() => changeLang("en")} className="text-2xl">🇬🇧</button>
+        <button onClick={() => changeLang("de")} className="text-2xl">🇩🇪</button>
+        <button onClick={() => changeLang("zh")} className="text-2xl">🇨🇳</button>
+        <button onClick={() => changeLang("ja")} className="text-2xl">🇯🇵</button>
+        <button onClick={() => changeLang("es")} className="text-2xl">🇪🇸</button>
       </div>
 
       <h1 className="text-3xl font-bold mb-8">{translations[lang].title}</h1>
