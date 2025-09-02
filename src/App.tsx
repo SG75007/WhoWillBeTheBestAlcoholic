@@ -7,11 +7,37 @@ interface Candidat {
   image: string;
 }
 
+const translations = {
+  fr: {
+    title: "Qui est le plus alcoolique ? 🍻",
+    vote: "Voter",
+    percentage: "% des votes",
+    glass: "Verre rempli 🍺",
+    candidates: ["Personne 1", "Personne 2", "Personne 3"],
+  },
+  en: {
+    title: "Who is the biggest alcoholic? 🍻",
+    vote: "Vote",
+    percentage: "% of votes",
+    glass: "Glass filled 🍺",
+    candidates: ["Person 1", "Person 2", "Person 3"],
+  },
+  de: {
+    title: "Wer ist der größte Alkoholiker? 🍻",
+    vote: "Abstimmen",
+    percentage: "% der Stimmen",
+    glass: "Gefülltes Glas 🍺",
+    candidates: ["Person 1", "Person 2", "Person 3"],
+  },
+};
+
 export default function App() {
+  const [lang, setLang] = useState<"fr" | "en" | "de">("fr");
+
   const candidats: Candidat[] = [
-    { id: 1, nom: "Personne 1", image: "https://placekitten.com/200/200" },
-    { id: 2, nom: "Personne 2", image: "https://placekitten.com/201/200" },
-    { id: 3, nom: "Personne 3", image: "https://placekitten.com/202/200" },
+    { id: 1, nom: translations[lang].candidates[0], image: "https://placekitten.com/200/200" },
+    { id: 2, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
+    { id: 3, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
   ];
 
   const [votes, setVotes] = useState<number[]>([0, 0, 0]);
@@ -32,8 +58,16 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6">
-      <h1 className="text-3xl font-bold mb-8">Qui est le plus alcoolique ? 🍻</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
+
+      {/* Sélecteur de langue */}
+      <div className="absolute top-4 left-4 flex space-x-2">
+        <button onClick={() => setLang("fr")} className="text-2xl">🇫🇷</button>
+        <button onClick={() => setLang("en")} className="text-2xl">🇬🇧</button>
+        <button onClick={() => setLang("de")} className="text-2xl">🇩🇪</button>
+      </div>
+
+      <h1 className="text-3xl font-bold mb-8">{translations[lang].title}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
         {candidats.map((c, index) => (
@@ -54,11 +88,11 @@ export default function App() {
               disabled={voted}
               className="rounded-2xl px-6 py-2 bg-amber-600 text-white font-semibold hover:bg-amber-700 disabled:bg-gray-300"
             >
-              Voter
+              {translations[lang].vote}
             </button>
             {voted && (
               <p className="mt-2 text-sm text-gray-600">
-                {getPercentage(index)}% des votes
+                {getPercentage(index)}{translations[lang].percentage}
               </p>
             )}
           </div>
@@ -75,7 +109,9 @@ export default function App() {
               transition={{ duration: 1 }}
             />
           </div>
-          <p className="absolute -bottom-8 font-semibold">Verre rempli 🍺</p>
+          <p className="absolute -bottom-8 font-semibold">
+            {translations[lang].glass}
+          </p>
         </div>
       )}
     </div>
