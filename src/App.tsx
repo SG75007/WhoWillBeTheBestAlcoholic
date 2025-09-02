@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+import PhotoSylvainHappy from "./assets/SG_Positif.png";
+
 interface Candidat {
   id: number;
   nom: string;
@@ -69,7 +71,7 @@ export default function App() {
   };
 
   const candidats: Candidat[] = [
-    { id: 1, nom: translations[lang].candidates[0], image: "/public/Photo/SG_Positif.png" },
+    { id: 1, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
     { id: 2, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
     { id: 3, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
   ];
@@ -115,7 +117,7 @@ export default function App() {
             <motion.img
               src={c.image}
               alt={c.nom}
-              className="w-40 h-40 rounded-full object-cover mb-4"
+              className="w-40 h-40 rounded-full object-cover mb-4 ring-4 ring-white shadow-lg"
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ repeat: Infinity, duration: 3 }}
             />
