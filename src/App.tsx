@@ -84,8 +84,8 @@ export default function App() {
 
   const candidats: Candidat[] = [
     { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
-    { id: 1, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
-    { id: 2, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
+    { id: 1, nom: translations[lang].candidates[1], image: PhotoSylvainHappy },
+    { id: 2, nom: translations[lang].candidates[2], image: PhotoSylvainHappy },
   ];
 
   const handleVote = async (id: number) => {

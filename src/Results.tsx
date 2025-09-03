@@ -1,17 +1,8 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
-
-// Confettis
-const ConfettiPiece = ({ x, y, rotate }: { x: number; y: number; rotate: number }) => (
-  <motion.div
-    className="absolute w-2 h-2 bg-yellow-400 rounded-full"
-    style={{ left: x, top: y }}
-    animate={{ y: 400, rotate: rotate + 360 }}
-    transition={{ duration: 2, repeat: Infinity, repeatType: "loop", ease: "linear" }}
-  />
-);
+import { motion } from "framer-motion";
+import PhotoSylvainHappy from "./assets/SG_Positif.png";
 
 interface Candidat {
   id: number;
@@ -20,47 +11,20 @@ interface Candidat {
 }
 
 const translations = {
-  fr: {
-    title: "Résultats 🍻",
-    percentage: "% des votes",
-    candidates: ["Sylvain", "Jonathan", "Nicolas"],
-  },
-  en: {
-    title: "Results 🍻",
-    percentage: "% of votes",
-    candidates: ["Sylvain", "Jonathan", "Nicholas"],
-  },
-  de: {
-    title: "Ergebnisse 🍻",
-    percentage: "% der Stimmen",
-    candidates: ["Sylvain", "Jonathan", "Nikolaus"],
-  },
-  zh: {
-    title: "结果 🍻",
-    percentage: "% 的投票",
-    candidates: ["西尔万", "乔纳森", "尼古拉斯"],
-  },
-  ja: {
-    title: "結果 🍻",
-    percentage: "％の投票",
-    candidates: ["シルヴァン", "ジョナサン", "ニコラス"],
-  },
-  es: {
-    title: "Resultados 🍻",
-    percentage: "% de votos",
-    candidates: ["Sylvain", "Jonathan", "Nicolás"],
-  },
+  fr: { title: "Résultats 🍻", candidates: ["Sylvain", "Jonathan", "Nicolas"] },
+  en: { title: "Results 🍻", candidates: ["Sylvain", "Jonathan", "Nicholas"] },
+  de: { title: "Ergebnisse 🍻", candidates: ["Sylvain", "Jonathan", "Nikolaus"] },
+  zh: { title: "结果 🍻", candidates: ["西尔万", "乔纳森", "尼古拉斯"] },
+  ja: { title: "結果 🍻", candidates: ["シルヴァン", "ジョナサン", "ニコラス"] },
+  es: { title: "Resultados 🍻", candidates: ["Sylvain", "Jonathan", "Nicolás"] },
 };
 
 export default function Results() {
   const [votes, setVotes] = useState([0, 0, 0]);
-  const [lang, setLang] = useState<keyof typeof translations>("fr");
+  const lang = (localStorage.getItem("lang") as keyof typeof translations) || "fr";
 
-  // 🔥 Récupération votes en temps réel
+  // 🔥 Récupérer votes en temps réel
   useEffect(() => {
-    const savedLang = localStorage.getItem("lang") as keyof typeof translations;
-    if (savedLang && translations[savedLang]) setLang(savedLang);
-
     const unsub = onSnapshot(doc(db, "votes", "resultats"), (snap) => {
       const data = snap.data();
       if (data) {
@@ -75,60 +39,47 @@ export default function Results() {
   }, []);
 
   const totalVotes = votes.reduce((a, b) => a + b, 0);
-  const winnerIndex = votes.indexOf(Math.max(...votes));
+  const percentages = votes.map(v => totalVotes ? (v / totalVotes) * 100 : 0);
+
+  const maxIndex = votes.indexOf(Math.max(...votes));
 
   const candidats: Candidat[] = [
-    { id: 0, nom: translations[lang].candidates[0], image: "/assets/SG_Positif.png" },
+    { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
     { id: 1, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
     { id: 2, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-amber-50 p-6 relative">
-      <h1 className="text-3xl font-bold mb-12">{translations[lang].title}</h1>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(to bottom, #FFFBEB, #FFE0B2)", padding: "1.5rem" }}>
+      <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "2rem" }}>{translations[lang].title}</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-5xl relative">
-        {candidats.map((c, idx) => {
-          const percentage = totalVotes === 0 ? 0 : (votes[idx] / totalVotes) * 100;
-
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: "2rem" }}>
+        {candidats.map((c, index) => {
+          const isWinner = index === maxIndex;
           return (
-            <div key={c.id} className="flex flex-col items-center relative">
-              {/* Confettis si gagnant */}
-              {idx === winnerIndex &&
-                Array.from({ length: 20 }).map((_, i) => (
-                  <ConfettiPiece
-                    key={i}
-                    x={Math.random() * 80 - 10}
-                    y={Math.random() * -50}
-                    rotate={Math.random() * 360}
-                  />
-                ))}
-
-              {/* Tête du candidat */}
+            <div key={c.id} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <motion.img
                 src={c.image}
                 alt={c.nom}
-                className="w-24 h-24 rounded-full object-cover mb-4 shadow-lg ring-4 ring-white"
-                animate={
-                  idx === winnerIndex
-                    ? { rotate: [0, 10, -10, 10, -10, 0], scale: [1, 1.2, 1, 1.2, 1] }
-                    : {}
-                }
-                transition={{ repeat: idx === winnerIndex ? Infinity : 0, duration: 1 }}
+                style={{
+                  width: isWinner ? 120 : 100,
+                  height: isWinner ? 120 : 100,
+                  borderRadius: "50%",
+                  border: "4px solid white",
+                  marginBottom: "0.5rem",
+                }}
+                animate={isWinner ? { rotate: [0, 10, -10, 0], scale: [1, 1.2, 1, 1.2] } : {}}
+                transition={{ repeat: Infinity, duration: 1.5 }}
               />
-
-              {/* Bière */}
-              <div className="relative w-20 h-60 border-4 border-amber-900 rounded-b-3xl overflow-hidden bg-gray-100">
+              <div style={{ width: 60, height: 150, border: "2px solid #B77F1C", borderRadius: "0 0 15px 15px", overflow: "hidden", background: "#FFF8E1" }}>
                 <motion.div
-                  className="bg-amber-500 w-full absolute bottom-0"
+                  style={{ backgroundColor: "#FFC107", width: "100%", height: "0%" }}
                   initial={{ height: 0 }}
-                  animate={{ height: `${percentage}%` }}
-                  transition={{ duration: 1.5 }}
+                  animate={{ height: `${percentages[index]}%` }}
+                  transition={{ duration: 2 }}
                 />
               </div>
-
-              <p className="mt-2 font-semibold">{c.nom}</p>
-              <p className="text-sm text-gray-600">{Math.round(percentage)}{translations[lang].percentage}</p>
+              <span style={{ marginTop: "0.5rem" }}>{c.nom}</span>
             </div>
           );
         })}
