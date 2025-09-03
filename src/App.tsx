@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
+import { db } from "./firebase";
+import { doc, updateDoc, increment, onSnapshot } from "firebase/firestore";
 import PhotoSylvainHappy from "./assets/SG_Positif.png";
 
 interface Candidat {
@@ -56,13 +57,22 @@ const translations = {
 
 export default function App() {
   const [lang, setLang] = useState<keyof typeof translations>("fr");
+  const [votes, setVotes] = useState<number[]>([0, 0, 0]);
+  const [voted, setVoted] = useState(false);
 
-  // Sauvegarde la langue dans localStorage
+  // 🔥 Récupérer votes en temps réel
   useEffect(() => {
-    const savedLang = localStorage.getItem("lang") as keyof typeof translations;
-    if (savedLang && translations[savedLang]) {
-      setLang(savedLang);
-    }
+    const unsub = onSnapshot(doc(db, "votes", "resultats"), (snap) => {
+      const data = snap.data();
+      if (data) {
+        setVotes([
+          data.candidat1 || 0,
+          data.candidat2 || 0,
+          data.candidat3 || 0,
+        ]);
+      }
+    });
+    return () => unsub();
   }, []);
 
   const changeLang = (lng: keyof typeof translations) => {
@@ -71,22 +81,24 @@ export default function App() {
   };
 
   const candidats: Candidat[] = [
-    { id: 1, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
-    { id: 2, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
-    { id: 3, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
+    { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
+    { id: 1, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
+    { id: 2, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
   ];
 
-  const [votes, setVotes] = useState<number[]>([0, 0, 0]);
-  const [voted, setVoted] = useState(false);
-  const totalVotes = votes.reduce((a, b) => a + b, 0);
-
-  const handleVote = (id: number) => {
+  const handleVote = async (id: number) => {
     if (voted) return;
-    const newVotes = [...votes];
-    newVotes[id] += 1;
-    setVotes(newVotes);
     setVoted(true);
+
+    const candidatKey = `candidat${id + 1}`;
+    const ref = doc(db, "votes", "resultats");
+
+    await updateDoc(ref, {
+      [candidatKey]: increment(1),
+    });
   };
+
+  const totalVotes = votes.reduce((a, b) => a + b, 0);
 
   const getPercentage = (id: number) => {
     if (totalVotes === 0) return 0;
@@ -95,7 +107,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
-
       {/* Sélecteur de langue */}
       <div className="absolute top-4 left-4 flex space-x-2">
         <button onClick={() => changeLang("fr")} className="text-2xl">🇫🇷</button>
