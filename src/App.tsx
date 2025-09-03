@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { db } from "./firebase";
 import { doc, updateDoc, increment, onSnapshot } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import PhotoSylvainHappy from "./assets/SG_Positif.png";
 
 interface Candidat {
@@ -56,6 +57,7 @@ const translations = {
 };
 
 export default function App() {
+  const navigate = useNavigate();
   const [lang, setLang] = useState<keyof typeof translations>("fr");
   const [votes, setVotes] = useState<number[]>([0, 0, 0]);
   const [voted, setVoted] = useState(false);
@@ -96,6 +98,11 @@ export default function App() {
     await updateDoc(ref, {
       [candidatKey]: increment(1),
     });
+
+    // ⬅ Redirection vers la page résultats
+    setTimeout(() => {
+      navigate("/results");
+    }, 800); // petit délai pour animation du vote
   };
 
   const totalVotes = votes.reduce((a, b) => a + b, 0);
