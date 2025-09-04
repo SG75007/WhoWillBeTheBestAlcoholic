@@ -117,7 +117,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
       {/* Sélecteur de langue */}
-      <div className="absolute top-4 left-4 flex space-x-2">
+      <div className="w-full flex justify-end gap-2 mb-4">
         <button onClick={() => changeLang("fr")} className="text-2xl">🇫🇷</button>
         <button onClick={() => changeLang("en")} className="text-2xl">🇬🇧</button>
         <button onClick={() => changeLang("de")} className="text-2xl">🇩🇪</button>
