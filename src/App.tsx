@@ -171,6 +171,10 @@ export default function App() {
           </p>
         </div>
       )}
+      <div className="min-h-screen bg-amber-50 text-gray-900 flex items-center justify-center">
+  <h1 className="text-3xl font-bold">Hello Tailwind 🎉</h1>
+</div>
     </div>
+    
   );
 }
