@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { motion } from "framer-motion";
-import PhotoSylvainHappy from "./assets/SG_Positif.png";
+import PhotoSylvainBad from "./assets/SG_Bad.png";
 import Licorne from "./assets/licorne.png"; // ajoute ton image de licorne
 
 interface Candidat {
@@ -63,7 +63,7 @@ export default function Results() {
   const maxIndex = votes.indexOf(Math.max(...votes));
 
   const candidats: Candidat[] = [
-    { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
+    { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainBad },
     { id: 1, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
     { id: 2, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
   ];

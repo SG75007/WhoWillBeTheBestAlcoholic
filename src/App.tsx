@@ -4,6 +4,8 @@ import { db } from "./firebase";
 import { doc, updateDoc, increment, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import PhotoSylvainHappy from "./assets/SG_Positif.png";
+import PhotoNicolasHappy from "./assets/NB_Positif.png";
+import PhotoJoesHappy from "./assets/JC_Positif.png";
 
 interface Candidat {
   id: number;
@@ -84,8 +86,8 @@ export default function App() {
 
   const candidats: Candidat[] = [
     { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
-    { id: 1, nom: translations[lang].candidates[1], image: PhotoSylvainHappy },
-    { id: 2, nom: translations[lang].candidates[2], image: PhotoSylvainHappy },
+    { id: 1, nom: translations[lang].candidates[1], image: PhotoJoesHappy },
+    { id: 2, nom: translations[lang].candidates[2], image: PhotoNicolasHappy },
   ];
 
   const handleVote = async (id: number) => {
@@ -135,7 +137,7 @@ export default function App() {
             <motion.img
               src={c.image}
               alt={c.nom}
-              className="w-40 h-40 rounded-full object-cover mb-4 ring-4 ring-white shadow-lg"
+              className="w-fixed rounded-full object-cover mb-4 ring-4 shadow-lg"
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ repeat: Infinity, duration: 3 }}
             />

@@ -22,6 +22,13 @@ a:hover {
   color: #535bf2;
 }
 
+/* CSS Tailwind pur */
+.w-fixed {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+}
+
 body {
   margin: 0;
   display: flex;
