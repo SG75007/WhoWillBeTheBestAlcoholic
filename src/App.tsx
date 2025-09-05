@@ -15,6 +15,7 @@ interface Candidat {
 
 const translations = {
   fr: {
+    siteTitle: "🍺 Qui est le plus alcoolique ?",
     title: "Qui est le plus alcoolique ? 🍻",
     vote: "Voter",
     percentage: "% des votes",
@@ -22,6 +23,7 @@ const translations = {
     candidates: ["Sylvain", "Jonathan", "Nicolas"],
   },
   en: {
+    siteTitle: "🍺 Who is the biggest alcoholic?",
     title: "Who is the biggest alcoholic? 🍻",
     vote: "Vote",
     percentage: "% of votes",
@@ -29,6 +31,7 @@ const translations = {
     candidates: ["Sylvain", "Jonathan", "Nicholas"],
   },
   de: {
+    siteTitle: "🍺 Wer ist der größte Alkoholiker?",
     title: "Wer ist der größte Alkoholiker? 🍻",
     vote: "Abstimmen",
     percentage: "% der Stimmen",
@@ -36,6 +39,7 @@ const translations = {
     candidates: ["Sylvain", "Jonathan", "Nikolaus"],
   },
   zh: {
+    siteTitle: "🍺 谁是最大的酒鬼？",
     title: "谁是最大的酒鬼？🍻",
     vote: "投票",
     percentage: "% 的投票",
@@ -43,6 +47,7 @@ const translations = {
     candidates: ["西尔万", "乔纳森", "尼古拉斯"],
   },
   ja: {
+    siteTitle: "🍺 誰が一番の酒豪？",
     title: "誰が一番の酒豪？🍻",
     vote: "投票する",
     percentage: "％の投票",
@@ -50,6 +55,7 @@ const translations = {
     candidates: ["シルヴァン", "ジョナサン", "ニコラス"],
   },
   es: {
+    siteTitle: "🍺 ¿Quién es el más alcohólico?",
     title: "¿Quién es el más alcohólico? 🍻",
     vote: "Votar",
     percentage: "% de votos",
@@ -63,6 +69,11 @@ export default function App() {
   const [lang, setLang] = useState<keyof typeof translations>("fr");
   const [votes, setVotes] = useState<number[]>([0, 0, 0]);
   const [voted, setVoted] = useState(false);
+
+  // 🔥 Change le titre du site quand la langue change
+  useEffect(() => {
+    document.title = translations[lang].siteTitle;
+  }, [lang]);
 
   // 🔥 Récupérer votes en temps réel
   useEffect(() => {
@@ -114,16 +125,32 @@ export default function App() {
     return Math.round((votes[id] / totalVotes) * 100);
   };
 
+  // mapping des drapeaux
+  const flagMap: Record<string, string> = {
+    fr: "🇫🇷",
+    en: "🇬🇧",
+    de: "🇩🇪",
+    zh: "🇨🇳",
+    ja: "🇯🇵",
+    es: "🇪🇸",
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
-      {/* Sélecteur de langue */}
-      <div className="w-full flex justify-end gap-2 mb-4">
-        <button onClick={() => changeLang("fr")} className="text-2xl">🇫🇷</button>
-        <button onClick={() => changeLang("en")} className="text-2xl">🇬🇧</button>
-        <button onClick={() => changeLang("de")} className="text-2xl">🇩🇪</button>
-        <button onClick={() => changeLang("zh")} className="text-2xl">🇨🇳</button>
-        <button onClick={() => changeLang("ja")} className="text-2xl">🇯🇵</button>
-        <button onClick={() => changeLang("es")} className="text-2xl">🇪🇸</button>
+      {/* 🌍 Sélecteur de langue avec drapeaux uniquement */}
+      <div className="absolute top-4 right-4 flex space-x-2 z-50">
+        {Object.keys(flagMap).map((lng) => (
+              <motion.button
+                key={lng}
+                onClick={() => changeLang(lng as keyof typeof translations)}
+                whileHover={{ scale: 1.3 }}
+                whileTap={{ scale: 0.9 }}
+                className="bg-transparent border-none p-0 m-0 text-[2.5rem] cursor-pointer"
+                title={lng}
+              >
+            {flagMap[lng]}
+          </motion.button>
+        ))}
       </div>
 
       <h1 className="text-3xl font-bold mb-8">{translations[lang].title}</h1>
