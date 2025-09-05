@@ -125,33 +125,26 @@ export default function App() {
     return Math.round((votes[id] / totalVotes) * 100);
   };
 
-  // mapping des drapeaux
-  const flagMap: Record<string, string> = {
-    fr: "🇫🇷",
-    en: "🇬🇧",
-    de: "🇩🇪",
-    zh: "🇨🇳",
-    ja: "🇯🇵",
-    es: "🇪🇸",
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
-      {/* 🌍 Sélecteur de langue avec drapeaux uniquement */}
-      <div className="absolute top-4 right-4 flex space-x-2 z-50">
-        {Object.keys(flagMap).map((lng) => (
-              <motion.button
-                key={lng}
-                onClick={() => changeLang(lng as keyof typeof translations)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                className="bg-transparent border-none p-0 m-0 text-[2.5rem] cursor-pointer"
-                title={lng}
-              >
-            {flagMap[lng]}
-          </motion.button>
-        ))}
-      </div>
+    {/* 🌍 Sélecteur de langue en liste déroulante */}
+    <div className="position-sticky top-4 right-25%">
+      <select
+        value={lang}
+        onChange={(e) => changeLang(e.target.value as keyof typeof translations)}
+        className="bg-white border border-gray-300 rounded-lg shadow-md px-3 py-2 
+                  text-sm md:text-base cursor-pointer focus:outline-none focus:ring-2 
+                  focus:ring-amber-500"
+      >
+        <option value="fr">🇫🇷 Français</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+    </div>
+
 
       <h1 className="text-3xl font-bold mb-8">{translations[lang].title}</h1>
 
