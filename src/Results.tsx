@@ -3,6 +3,8 @@ import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { motion } from "framer-motion";
 import PhotoSylvainBad from "./assets/SG_Bad.png";
+import PhotoNicoBad from "./assets/NB_Bad.png";
+import PhotoJoeBad from "./assets/JC_Bad.png";
 import Licorne from "./assets/licorne.png"; // ajoute ton image de licorne
 
 interface Candidat {
@@ -64,8 +66,8 @@ export default function Results() {
 
   const candidats: Candidat[] = [
     { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainBad },
-    { id: 1, nom: translations[lang].candidates[1], image: "https://placekitten.com/201/200" },
-    { id: 2, nom: translations[lang].candidates[2], image: "https://placekitten.com/202/200" },
+    { id: 1, nom: translations[lang].candidates[1], image: PhotoJoeBad },
+    { id: 2, nom: translations[lang].candidates[2], image: PhotoNicoBad },
   ];
 
   return (
