@@ -2,25 +2,18 @@ import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { motion } from "framer-motion";
+import { translations } from "./translations";
 import PhotoSylvainBad from "./assets/SG_Bad.png";
 import PhotoNicoBad from "./assets/NB_Bad.png";
 import PhotoJoeBad from "./assets/JC_Bad.png";
 import Licorne from "./assets/licorne.png"; // ajoute ton image de licorne
+
 
 interface Candidat {
   id: number;
   nom: string;
   image: string;
 }
-
-const translations = {
-  fr: { title: "Résultats 🍻", candidates: ["Sylvain", "Jonathan", "Nicolas"] },
-  en: { title: "Results 🍻", candidates: ["Sylvain", "Jonathan", "Nicholas"] },
-  de: { title: "Ergebnisse 🍻", candidates: ["Sylvain", "Jonathan", "Nikolaus"] },
-  zh: { title: "结果 🍻", candidates: ["西尔万", "乔纳森", "尼古拉斯"] },
-  ja: { title: "結果 🍻", candidates: ["シルヴァン", "ジョナサン", "ニコラス"] },
-  es: { title: "Resultados 🍻", candidates: ["Sylvain", "Jonathan", "Nicolás"] },
-};
 
 // Bulles réalistes
 const Bubble = ({ delay, left }: { delay: number; left: number }) => (
@@ -72,7 +65,7 @@ export default function Results() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(to bottom, #FFFBEB, #FFE0B2)", overflow: "hidden", padding: "2rem", position: "relative" }}>
-      <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "2rem", textShadow: "1px 1px 2px #aaa" }}>{translations[lang].title}</h1>
+      <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "2rem", textShadow: "1px 1px 2px #aaa" }}>{translations[lang].voteTitle}</h1>
 
       {/* Licorne qui traverse */}
       <motion.img

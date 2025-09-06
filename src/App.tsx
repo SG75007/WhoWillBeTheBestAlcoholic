@@ -6,63 +6,13 @@ import { useNavigate } from "react-router-dom";
 import PhotoSylvainHappy from "./assets/SG_Positif.png";
 import PhotoNicolasHappy from "./assets/NB_Positif.png";
 import PhotoJoesHappy from "./assets/JC_Positif.png";
+import { translations } from "./translations";
 
 interface Candidat {
   id: number;
   nom: string;
   image: string;
 }
-
-const translations = {
-  fr: {
-    siteTitle: "🍺 Qui est le plus alcoolique ?",
-    title: "Qui est le plus alcoolique ? 🍻",
-    vote: "Voter",
-    percentage: "% des votes",
-    glass: "Verre rempli 🍺",
-    candidates: ["Sylvain", "Jonathan", "Nicolas"],
-  },
-  en: {
-    siteTitle: "🍺 Who is the biggest alcoholic?",
-    title: "Who is the biggest alcoholic? 🍻",
-    vote: "Vote",
-    percentage: "% of votes",
-    glass: "Glass filled 🍺",
-    candidates: ["Sylvain", "Jonathan", "Nicholas"],
-  },
-  de: {
-    siteTitle: "🍺 Wer ist der größte Alkoholiker?",
-    title: "Wer ist der größte Alkoholiker? 🍻",
-    vote: "Abstimmen",
-    percentage: "% der Stimmen",
-    glass: "Gefülltes Glas 🍺",
-    candidates: ["Sylvain", "Jonathan", "Nikolaus"],
-  },
-  zh: {
-    siteTitle: "🍺 谁是最大的酒鬼？",
-    title: "谁是最大的酒鬼？🍻",
-    vote: "投票",
-    percentage: "% 的投票",
-    glass: "满杯 🍺",
-    candidates: ["西尔万", "乔纳森", "尼古拉斯"],
-  },
-  ja: {
-    siteTitle: "🍺 誰が一番の酒豪？",
-    title: "誰が一番の酒豪？🍻",
-    vote: "投票する",
-    percentage: "％の投票",
-    glass: "満杯のグラス 🍺",
-    candidates: ["シルヴァン", "ジョナサン", "ニコラス"],
-  },
-  es: {
-    siteTitle: "🍺 ¿Quién es el más alcohólico?",
-    title: "¿Quién es el más alcohólico? 🍻",
-    vote: "Votar",
-    percentage: "% de votos",
-    glass: "Vaso lleno 🍺",
-    candidates: ["Sylvain", "Jonathan", "Nicolás"],
-  },
-};
 
 export default function App() {
   const navigate = useNavigate();
@@ -136,17 +86,40 @@ export default function App() {
                   text-sm md:text-base cursor-pointer focus:outline-none focus:ring-2 
                   focus:ring-amber-500"
       >
-        <option value="fr">🇫🇷 Français</option>
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="zh">🇨🇳 中文</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="es">🇪🇸 Español</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="it">🇮🇹 Italiano</option>
+          <option value="pt">🇵🇹 Português</option>
+          <option value="nl">🇳🇱 Nederlands</option>
+          <option value="pl">🇵🇱 Polski</option>
+          <option value="cs">🇨🇿 Čeština</option>
+          <option value="sk">🇸🇰 Slovenčina</option>
+          <option value="hu">🇭🇺 Magyar</option>
+          <option value="ro">🇷🇴 Română</option>
+          <option value="bg">🇧🇬 Български</option>
+          <option value="hr">🇭🇷 Hrvatski</option>
+          <option value="sl">🇸🇮 Slovenščina</option>
+          <option value="fi">🇫🇮 Suomi</option>
+          <option value="sv">🇸🇪 Svenska</option>
+          <option value="da">🇩🇰 Dansk</option>
+          <option value="et">🇪🇪 Eesti</option>
+          <option value="lv">🇱🇻 Latviešu</option>
+          <option value="lt">🇱🇹 Lietuvių</option>
+          <option value="el">🇬🇷 Ελληνικά</option>
+          <option value="ga">🇮🇪 Gaeilge</option>
+          <option value="mt">🇲🇹 Malti</option>
+          <option value="uk">🇺🇦 Українська</option>
+          <option value="br">🏴 Brezhoneg</option>
+          <option value="co">🏴‍☠️ Corsu</option>
+          <option value="ja">🇯🇵 日本語</option>
+          <option value="zh">🇨🇳 中文</option>
       </select>
     </div>
 
 
-      <h1 className="text-3xl font-bold mb-8">{translations[lang].title}</h1>
+      <h1 className="text-3xl font-bold mb-8">{translations[lang].siteTitle}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
         {candidats.map((c, index) => (
