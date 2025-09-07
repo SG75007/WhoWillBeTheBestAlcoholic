@@ -3,15 +3,17 @@ import { motion } from "framer-motion";
 import { db } from "./firebase";
 import { doc, updateDoc, increment, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import PhotoSylvainHappy from "./assets/SG_Positif.png";
-import PhotoNicolasHappy from "./assets/NB_Positif.png";
-import PhotoJoesHappy from "./assets/JC_Positif.png";
 import { translations } from "./translations";
+
+// 🎥 Import des vidéos
+import VideoSylvainHappy from "./assets/SG_Positif.mp4";
+import VideoNicolasHappy from "./assets/NB_Positif.mp4";
+import VideoJoessHappy from "./assets/JC_Positif.mp4";
 
 interface Candidat {
   id: number;
   nom: string;
-  image: string;
+  video: string;
 }
 
 export default function App() {
@@ -46,9 +48,9 @@ export default function App() {
   };
 
   const candidats: Candidat[] = [
-    { id: 0, nom: translations[lang].candidates[0], image: PhotoSylvainHappy },
-    { id: 1, nom: translations[lang].candidates[1], image: PhotoJoesHappy },
-    { id: 2, nom: translations[lang].candidates[2], image: PhotoNicolasHappy },
+    { id: 0, nom: translations[lang].candidates[0], video: VideoSylvainHappy },
+    { id: 1, nom: translations[lang].candidates[1], video: VideoJoessHappy },
+    { id: 2, nom: translations[lang].candidates[2], video: VideoNicolasHappy },
   ];
 
   const handleVote = async (id: number) => {
@@ -70,22 +72,17 @@ export default function App() {
 
   const totalVotes = votes.reduce((a, b) => a + b, 0);
 
-  const getPercentage = (id: number) => {
-    if (totalVotes === 0) return 0;
-    return Math.round((votes[id] / totalVotes) * 100);
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
-    {/* 🌍 Sélecteur de langue en liste déroulante */}
-    <div className="position-sticky top-4 right-25%">
-      <select
-        value={lang}
-        onChange={(e) => changeLang(e.target.value as keyof typeof translations)}
-        className="bg-white border border-gray-300 rounded-lg shadow-md px-3 py-2 
-                  text-sm md:text-base cursor-pointer focus:outline-none focus:ring-2 
-                  focus:ring-amber-500"
-      >
+      {/* 🌍 Sélecteur de langue */}
+      <div className="absolute top-4 right-4">
+        <select
+          value={lang}
+          onChange={(e) => changeLang(e.target.value as keyof typeof translations)}
+          className="bg-white border border-gray-300 rounded-lg shadow-md px-3 py-2 
+                     text-sm md:text-base cursor-pointer focus:outline-none focus:ring-2 
+                     focus:ring-amber-500"
+        >
           <option value="fr">🇫🇷 Français</option>
           <option value="en">🇬🇧 English</option>
           <option value="de">🇩🇪 Deutsch</option>
@@ -115,49 +112,51 @@ export default function App() {
           <option value="co">🏴‍☠️ Corsu</option>
           <option value="ja">🇯🇵 日本語</option>
           <option value="zh">🇨🇳 中文</option>
-      </select>
-    </div>
-
+        </select>
+      </div>
 
       <h1 className="text-3xl font-bold mb-8">{translations[lang].siteTitle}</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+      {/* 🎥 Grille des 3 candidats */}
+      <div className="w-full max-w-md mx-auto grid grid-cols-3 gap-2 sm:gap-4 place-items-center">
         {candidats.map((c, index) => (
-          <div
-            key={c.id}
-            className="p-4 flex flex-col items-center shadow-xl rounded-2xl bg-white"
-          >
-            <motion.img
-              src={c.image}
-              alt={c.nom}
-              className="w-fixed rounded-full object-cover mb-4 ring-4 shadow-lg"
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 3 }}
-            />
-            <h2 className="text-lg font-semibold mb-2">{c.nom}</h2>
+          <div key={c.id} className="flex flex-col items-center">
+            {/* Avatar rond */}
+            <div className="w-full aspect-square rounded-full overflow-hidden ring-2 shadow-md">
+              <video
+                src={c.video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <span className="mt-1 text-[10px] sm:text-xs font-medium text-center">
+              {c.nom}
+            </span>
             <button
               onClick={() => handleVote(index)}
               disabled={voted}
-              className="rounded-2xl px-6 py-2 bg-amber-600 text-white font-semibold hover:bg-amber-700 disabled:bg-gray-300"
+              className="mt-1 px-2 py-1 text-[10px] sm:text-xs rounded-lg bg-amber-600 text-white font-semibold hover:bg-amber-700 disabled:bg-gray-300"
             >
               {translations[lang].vote}
             </button>
-            {voted && (
-              <p className="mt-2 text-sm text-gray-600">
-                {getPercentage(index)}{translations[lang].percentage}
-              </p>
-            )}
           </div>
         ))}
       </div>
 
+      {/* Verre rempli après vote */}
       {voted && (
         <div className="mt-12 w-40 h-64 relative flex items-end justify-center">
           <div className="absolute bottom-0 w-full h-full border-4 border-amber-900 rounded-b-3xl overflow-hidden">
             <motion.div
               className="bg-amber-500 w-full"
               initial={{ height: 0 }}
-              animate={{ height: `${(Math.max(...votes) / totalVotes) * 100}%` }}
+              animate={{
+                height: `${(Math.max(...votes) / totalVotes) * 100}%`,
+              }}
               transition={{ duration: 1 }}
             />
           </div>
@@ -166,9 +165,6 @@ export default function App() {
           </p>
         </div>
       )}
-      <div className="min-h-screen bg-amber-50 text-gray-900 flex items-center justify-center">
-</div>
     </div>
-    
   );
 }
