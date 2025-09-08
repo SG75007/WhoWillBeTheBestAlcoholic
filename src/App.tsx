@@ -10,10 +10,36 @@ import VideoSylvainHappy from "./assets/SG_Positif.mp4";
 import VideoNicolasHappy from "./assets/NB_Positif.mp4";
 import VideoJoessHappy from "./assets/JC_Positif.mp4";
 
+// 🍺 Import de l’icône bière
+import BeerIcon from "./assets/beer.png";
+
 interface Candidat {
   id: number;
   nom: string;
   video: string;
+}
+
+// 🍺 Composant pour une bière qui tombe avec taille aléatoire
+function FallingBeer() {
+  const x = `${Math.random() * 100}%`; // position horizontale aléatoire
+  const delay = Math.random() * 5; // délai aléatoire pour commencer
+  const duration = 4 + Math.random() * 3; // durée de la chute
+  const size = 12 + Math.random() * 64; // taille aléatoire entre 12px et 28px
+
+  return (
+    <motion.img
+      src={BeerIcon}
+      className="absolute opacity-70"
+      style={{ left: x, top: -50, width: size, height: size }}
+      animate={{ y: ["-50px", "110vh"] }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    />
+  );
 }
 
 export default function App() {
@@ -73,9 +99,14 @@ export default function App() {
   const totalVotes = votes.reduce((a, b) => a + b, 0);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-orange-100 p-6 relative overflow-hidden">
+      {/* 🍺 Pluie de bières avec taille aléatoire */}
+      {Array.from({ length: 30 }).map((_, i) => (
+        <FallingBeer key={i} />
+      ))}
+
       {/* 🌍 Sélecteur de langue */}
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 z-10">
         <select
           value={lang}
           onChange={(e) => changeLang(e.target.value as keyof typeof translations)}
@@ -115,10 +146,12 @@ export default function App() {
         </select>
       </div>
 
-      <h1 className="text-3xl font-bold mb-8">{translations[lang].siteTitle}</h1>
+      <h1 className="text-3xl font-bold mb-8 relative z-10">
+        {translations[lang].siteTitle}
+      </h1>
 
       {/* 🎥 Grille des 3 candidats */}
-      <div className="w-full max-w-md mx-auto grid grid-cols-3 gap-2 sm:gap-4 place-items-center">
+      <div className="w-full max-w-md mx-auto grid grid-cols-3 gap-2 sm:gap-4 place-items-center relative z-10">
         {candidats.map((c, index) => (
           <div key={c.id} className="flex flex-col items-center">
             {/* Avatar rond */}
@@ -149,7 +182,7 @@ export default function App() {
 
       {/* Verre rempli après vote */}
       {voted && (
-        <div className="mt-12 w-40 h-64 relative flex items-end justify-center">
+        <div className="mt-12 w-40 h-64 relative flex items-end justify-center z-10">
           <div className="absolute bottom-0 w-full h-full border-4 border-amber-900 rounded-b-3xl overflow-hidden">
             <motion.div
               className="bg-amber-500 w-full"
