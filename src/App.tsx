@@ -24,7 +24,7 @@ function FallingBeer() {
   const x = `${Math.random() * 100}%`; // position horizontale aléatoire
   const delay = Math.random() * 5; // délai aléatoire pour commencer
   const duration = 4 + Math.random() * 3; // durée de la chute
-  const size = 12 + Math.random() * 16; // taille aléatoire entre 12px et 28px
+  const size = 12 + Math.random() * 128; // taille aléatoire entre 12px et 28px
 
   return (
     <motion.img
@@ -101,7 +101,7 @@ export default function App() {
   return (
     <div className="min-h-screen relative bg-gradient-to-b from-amber-50 to-orange-100 overflow-hidden">
       {/* 🍺 Pluie de bières avec taille aléatoire */}
-      {Array.from({ length: 30 }).map((_, i) => (
+      {Array.from({ length: 100 }).map((_, i) => (
         <FallingBeer key={i} />
       ))}
 
