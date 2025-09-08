@@ -151,7 +151,8 @@ export default function App() {
         <div className="w-full max-w-md mx-auto grid grid-cols-3 gap-2 sm:gap-4 place-items-center">
           {candidats.map((c, index) => (
             <div key={c.id} className="flex flex-col items-center">
-              <div className="w-full aspect-square rounded-full overflow-hidden ring-2 shadow-md">
+              <div className="w-full aspect-square rounded-full overflow-hidden ring-2 shadow-md"
+              onClick={() => handleVote(index)} style={{ cursor: voted ? 'not-allowed' : 'pointer' }}>
                 <video
                   src={c.video}
                   autoPlay
