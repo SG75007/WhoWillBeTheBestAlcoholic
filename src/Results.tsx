@@ -4,12 +4,12 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { translations } from "./translations";
 
-import SylvainWin from "./assets/videos/sylvain_win.mp4";
-import SylvainLose from "./assets/videos/sylvain_lose.mp4";
-import JoeWin from "./assets/videos/joe_win.mp4";
-import JoeLose from "./assets/videos/joe_lose.mp4";
-import NicoWin from "./assets/videos/nico_win.mp4";
-import NicoLose from "./assets/videos/nico_lose.mp4";
+import SylvainWin from "./assets/videos/sylvain__win.mp4";
+import SylvainLose from "./assets/videos/sylvain__lose.mp4";
+import JoeWin from "./assets/videos/joe__win.mp4";
+import JoeLose from "./assets/videos/joe__lose.mp4";
+import NicoWin from "./assets/videos/nico__win.mp4";
+import NicoLose from "./assets/videos/nico__lose.mp4";
 
 import Licorne from "./assets/licorne.png";
 
@@ -20,6 +20,7 @@ interface Candidat {
   loseVideo: string;
 }
 
+// Bulles réalistes
 const Bubble = ({ delay, left }: { delay: number; left: number }) => (
   <motion.div
     initial={{ y: 0, opacity: 0 }}
@@ -37,7 +38,7 @@ const Bubble = ({ delay, left }: { delay: number; left: number }) => (
   />
 );
 
-const Confetti = ({ index }: { index: number }) => {
+const Confetti = () => {
   const size = 5 + Math.random() * 8;
   const left = Math.random() * 100;
   const color = ["#FFC107","#FFEB3B","#FF9800","#F44336","#E91E63","#9C27B0"][Math.floor(Math.random()*6)];
@@ -88,7 +89,6 @@ export default function Results() {
     return () => unsub();
   }, []);
 
-  // mettre à jour la largeur si l'utilisateur redimensionne l'écran
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -131,7 +131,7 @@ export default function Results() {
         alt="Licorne"
         style={{ position: "absolute", top: "20%", width: 120 }}
         animate={{
-          x: [ -120, screenWidth + 120 ], // traverse l'écran entier
+          x: [ -120, screenWidth + 120 ],
           y: jump ? [0, -100, 0] : [0],
         }}
         transition={{
@@ -142,15 +142,15 @@ export default function Results() {
       />
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", zIndex: 2 }}>
-        {candidats.map((c, index) => {
-          const isWinner = winners[index];
+        {candidats.map((c) => {
+          const isWinner = winners[c.id];
           return (
             <motion.div
               key={c.id}
               style={{ display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index*0.3, duration: 0.8 }}
+              transition={{ delay: c.id*0.3, duration: 0.8 }}
             >
               <motion.video
                 src={isWinner ? c.winVideo : c.loseVideo}
@@ -168,10 +168,10 @@ export default function Results() {
               <div style={{ width: 70, height: 180, border: "3px solid #B77F1C", borderRadius: "0 0 20px 20px", overflow: "hidden", background: "#FFF8E1", position: "relative" }}>
                 <motion.div style={{ backgroundColor: "#FFC107", width: "100%", borderRadius: "0 0 20px 20px", position: "absolute", bottom: 0 }}
                   initial={{ height: 0 }}
-                  animate={{ height: `${percentages[index]}%` }}
+                  animate={{ height: `${percentages[c.id]}%` }}
                   transition={{ duration: 2, ease: "easeInOut" }}
                 >
-                  <div style={{ position: "absolute", top: `${100-percentages[index]}%`, left:0, width:"100%", height:10, background:"radial-gradient(circle at 50% 50%, #fff, transparent 70%)", borderRadius:"50%", pointerEvents:"none" }} />
+                  <div style={{ position: "absolute", top: `${100-percentages[c.id]}%`, left:0, width:"100%", height:10, background:"radial-gradient(circle at 50% 50%, #fff, transparent 70%)", borderRadius:"50%", pointerEvents:"none" }} />
                   <svg viewBox="0 0 100 10" style={{ width:"100%", height:20, position:"absolute", bottom:0 }}>
                     <motion.path fill="#FFD54F"
                       d="M0 5 Q25 0 50 5 T100 5 V10 H0 Z"
@@ -183,9 +183,9 @@ export default function Results() {
                 {[...Array(5)].map((_, i) => <Bubble key={i} delay={i*0.3} left={10+i*12} />)}
               </div>
               <span style={{ marginTop: "0.5rem", fontWeight:isWinner ? "bold":"normal", fontSize: isWinner? "1.2rem":"1rem" }}>{c.nom}</span>
-              <span style={{ fontSize:"0.9rem", color:"#444" }}>{votes[index]} {translations[lang].vote} ({percentages[index].toFixed(1)}%)</span>
+              <span style={{ fontSize:"0.9rem", color:"#444" }}>{votes[c.id]} {translations[lang].vote} ({percentages[c.id].toFixed(1)}%)</span>
               <AnimatePresence>
-                {isWinner && [...Array(40)].map((_, i) => <Confetti key={i} index={i} />)}
+                {isWinner && [...Array(40)].map((_, i) => <Confetti key={i} />)}
               </AnimatePresence>
             </motion.div>
           )
